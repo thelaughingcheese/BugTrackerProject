@@ -100,8 +100,8 @@ public class LoginScreen{
 		loginInfo.add(loginFields,BorderLayout.CENTER);
 		loginInfo.add(loginButton);
 		loginInfo.add(registerButton);
-		loginPanel.add(loginInfo,BorderLayout.CENTER);
 		
+		loginPanel.add(loginInfo,BorderLayout.CENTER);
 		loginPanel.add(errorLabel);
 		loginPanel.add(Box.createGlue());
 	}
