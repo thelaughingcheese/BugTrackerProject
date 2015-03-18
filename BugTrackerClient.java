@@ -16,8 +16,8 @@ public class BugTrackerClient{
 		loginScreen = new LoginScreen(mainFrame, screenManager, loginSession);
 		registerScreen = new RegisterScreen(mainFrame,screenManager);
 		
-		loginScreen.loadScreen();
-		//registerScreen.loadScreen();
+		//loginScreen.loadScreen();
+		registerScreen.loadScreen();
 		mainFrame.setVisible(true);
 	}
 	

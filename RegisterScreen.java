@@ -35,6 +35,25 @@ public class RegisterScreen{
 		setupGUI();
 	}
 	
+	private class buttonListener implements ActionListener{
+		private RegisterScreen parent;
+		
+		public buttonListener(RegisterScreen p){
+			super();
+			parent = p;
+		}
+		
+		public void actionPerformed(ActionEvent e){
+			String command = e.getActionCommand();
+			if(command.equals("register")){
+				parent.registerClicked();
+			}
+			if(command.equals("cancel")){
+				parent.cancelClicked();
+			}
+		}
+	}
+	
 	private void setupGUI(){
 		//create components
 		registerPanel = new JPanel();
@@ -60,10 +79,17 @@ public class RegisterScreen{
 		
 		//configure components
 		registerPanel.setLayout(new BoxLayout(registerPanel,BoxLayout.Y_AXIS));
+		accountLabels.setLayout(new GridLayout(0,1));
+		accountFields.setLayout(new GridLayout(0,1));
 		
 		//configure events
+		registerButton.setActionCommand("register");
+		cancelButton.setActionCommand("cancel");
+		registerButton.addActionListener(new buttonListener(this));
+		cancelButton.addActionListener(new buttonListener(this));
 		
 		//add components
+		registerPanel.add(Box.createGlue());
 		registerPanel.add(title);
 		
 		accountLabels.add(usernameLabel);
@@ -71,12 +97,19 @@ public class RegisterScreen{
 		accountLabels.add(retypePasswordLabel);
 		accountLabels.add(emailLabel);
 		
+		accountFields.add(username);
+		accountFields.add(password);
+		accountFields.add(retypePassword);
+		accountFields.add(email);
+		
 		accountInfo.add(accountLabels);
 		accountInfo.add(accountFields);
 		accountInfo.add(registerButton);
 		accountInfo.add(cancelButton);
 		
 		registerPanel.add(accountInfo);
+		registerPanel.add(errorLabel);
+		registerPanel.add(Box.createGlue());
 	}
 	
 	public void loadScreen(){
@@ -85,5 +118,16 @@ public class RegisterScreen{
 		retypePassword.setText("");
 		
 		parentFrame.add(registerPanel);
+	}
+	
+	public void registerClicked(){
+		//check if username is okay
+		//check if password is valid
+		//check if passwords match
+		//check if email is okay
+	}
+	
+	public void cancelClicked(){
+		manager.changeScreen("login");
 	}
 }
