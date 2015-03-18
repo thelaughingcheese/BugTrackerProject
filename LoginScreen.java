@@ -36,6 +36,7 @@ public class LoginScreen{
 		username.setText("");
 		password.setText("");
 		parentFrame.add(loginPanel);
+		parentFrame.getContentPane().validate();
 	}
 	
 	private class buttonListener implements ActionListener{
@@ -86,6 +87,7 @@ public class LoginScreen{
 		loginButton.addActionListener(new buttonListener(this));
 		registerButton.addActionListener(new buttonListener(this));
 		
+		//add components
 		loginPanel.add(Box.createGlue());
 		loginPanel.add(title,BorderLayout.PAGE_START);
 		

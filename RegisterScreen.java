@@ -26,6 +26,7 @@ public class RegisterScreen{
 	private JLabel errorLabel;
 	
 	private JButton registerButton;
+	private JButton cancelButton;
 	
 	public RegisterScreen(JFrame parent, ScreenManager man){
 		parentFrame = parent;
@@ -55,15 +56,34 @@ public class RegisterScreen{
 		errorLabel = new JLabel("ERROR",JLabel.CENTER);
 		
 		registerButton = new JButton("Register");
+		cancelButton = new JButton("Cancel");
 		
 		//configure components
+		registerPanel.setLayout(new BoxLayout(registerPanel,BoxLayout.Y_AXIS));
+		
+		//configure events
+		
 		//add components
+		registerPanel.add(title);
+		
+		accountLabels.add(usernameLabel);
+		accountLabels.add(passwordLabel);
+		accountLabels.add(retypePasswordLabel);
+		accountLabels.add(emailLabel);
+		
+		accountInfo.add(accountLabels);
+		accountInfo.add(accountFields);
+		accountInfo.add(registerButton);
+		accountInfo.add(cancelButton);
+		
+		registerPanel.add(accountInfo);
 	}
 	
 	public void loadScreen(){
 		username.setText("");
 		password.setText("");
 		retypePassword.setText("");
+		
 		parentFrame.add(registerPanel);
 	}
 }

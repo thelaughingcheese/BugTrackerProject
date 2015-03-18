@@ -17,6 +17,7 @@ public class BugTrackerClient{
 		registerScreen = new RegisterScreen(mainFrame,screenManager);
 		
 		loginScreen.loadScreen();
+		//registerScreen.loadScreen();
 		mainFrame.setVisible(true);
 	}
 	
@@ -39,12 +40,12 @@ public class BugTrackerClient{
 				loginScreen.loadScreen();
 			}
 			else if(screen.equals("register")){
-				System.out.println("go to registration screen");
 				registerScreen.loadScreen();
 			}
 			else{
 				System.out.println("Unknown screen: " + screen);
 			}
+			mainFrame.getContentPane().validate();
 		}
 	}
 }
