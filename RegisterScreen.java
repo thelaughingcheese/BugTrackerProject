@@ -74,8 +74,8 @@ public class RegisterScreen{
 		email = new JTextField(20);
 		errorLabel = new JLabel("ERROR",JLabel.CENTER);
 		
-		registerButton = new JButton("Register");
-		cancelButton = new JButton("Cancel");
+		registerButton = new JButton("register");
+		cancelButton = new JButton("cancel");
 		
 		//configure components
 		registerPanel.setLayout(new BoxLayout(registerPanel,BoxLayout.Y_AXIS));
