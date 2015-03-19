@@ -22,6 +22,7 @@ public class RegisterScreen{
 	private JTextField email;
 	private JLabel errorLabel;
 	private JButton registerButton;
+	private JButton cancelButton;
 
 	public RegisterScreen(JFrame parent, ScreenManager man){
 		parentFrame = parent;
@@ -35,26 +36,31 @@ public class RegisterScreen{
 		accountInfo = new JPanel();
 		accountLabels = new JPanel();
 		accountFields = new JPanel();
+		
 		title = new JLabel("Register",JLabel.CENTER);
+		title.setFont(title.getFont().deriveFont(32f));
+		
 		usernameLabel = new JLabel("Username: ",JLabel.RIGHT);
 		passwordLabel = new JLabel("Password: ",JLabel.RIGHT);
 		retypePasswordLabel = new JLabel("Re-type Password: ",JLabel.RIGHT);
 		emailLabel = new JLabel("E-mail: ",JLabel.RIGHT);
+		
 		username = new JTextField(20);
 		password = new JPasswordField(20);
 		retypePassword = new JPasswordField(20);
 		email = new JTextField(20);
-		title.setFont(title.getFont().deriveFont(32f));
-		errorLabel = new JLabel("ERROR",JLabel.CENTER);
+		
 		registerButton = new JButton("Register");
+		cancelButton = new JButton("Cancel");
 
 		registerPanel.setLayout(new BoxLayout(registerPanel,BoxLayout.Y_AXIS));
 		accountInfo.setLayout(new FlowLayout());
-		accountLabels.setLayout(new GridLayout(5,1,0,10));
-		accountFields.setLayout(new GridLayout(5,1));
+		accountLabels.setLayout(new GridLayout(6,1,0,10));
+		accountFields.setLayout(new GridLayout(6,1));
 				
 		registerPanel.add(Box.createGlue());
 		registerPanel.add(title,BorderLayout.PAGE_START);
+
 		accountLabels.add(usernameLabel);
 		accountLabels.add(passwordLabel);
 		accountLabels.add(retypePasswordLabel);
@@ -65,6 +71,7 @@ public class RegisterScreen{
 		accountFields.add(retypePassword);
 		accountFields.add(email);
 		accountFields.add(registerButton);
+		accountFields.add(cancelButton);
 		
 		accountInfo.add(accountLabels,BorderLayout.WEST);
 		accountInfo.add(accountFields,BorderLayout.CENTER);
