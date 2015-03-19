@@ -70,14 +70,24 @@ public class RegisterScreen{
 	
 		registerButton = new JButton("Register");
 		cancelButton = new JButton("Cancel");
-		registerButton.addActionListener(new buttonListener(this));
-		cancelButton.addActionListener(new buttonListener(this));
-
+		errorLabel = new JLabel("ERROR",JLabel.CENTER);
+		
+		registerButton = new JButton("register");
+		cancelButton = new JButton("cancel");
+		
+		//configure components
 		registerPanel.setLayout(new BoxLayout(registerPanel,BoxLayout.Y_AXIS));
 		accountInfo.setLayout(new FlowLayout());
 		accountLabels.setLayout(new GridLayout(6,1,0,10));
 		accountFields.setLayout(new GridLayout(6,1));
 		
+		//configure events
+		registerButton.setActionCommand("register");
+		cancelButton.setActionCommand("cancel");
+		registerButton.addActionListener(new buttonListener(this));
+		cancelButton.addActionListener(new buttonListener(this));
+
+		//add components
 		registerPanel.add(Box.createGlue());
 		registerPanel.add(title,BorderLayout.PAGE_START);
 	
