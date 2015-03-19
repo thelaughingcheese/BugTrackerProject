@@ -29,6 +29,27 @@ public class RegisterScreen{
 		manager = man;
 		setupGUI();
 	}
+	
+
+	private class buttonListener implements ActionListener{
+		private RegisterScreen parent;
+		
+		public buttonListener(RegisterScreen p){
+			super();
+			parent = p;
+		}
+
+		public void actionPerformed(ActionEvent e){
+			String command = e.getActionCommand();
+			if(command.equals("register")){
+				parent.registerClicked();
+			}
+
+			if(command.equals("cancel")){
+				parent.cancelClicked();
+			}
+		}
+        }
 
 	private void setupGUI(){
 		//create components
@@ -52,6 +73,8 @@ public class RegisterScreen{
 		
 		registerButton = new JButton("Register");
 		cancelButton = new JButton("Cancel");
+		registerButton.addActionListener(new buttonListener(this));
+		cancelButton.addActionListener(new buttonListener(this));
 
 		registerPanel.setLayout(new BoxLayout(registerPanel,BoxLayout.Y_AXIS));
 		accountInfo.setLayout(new FlowLayout());
@@ -60,7 +83,7 @@ public class RegisterScreen{
 				
 		registerPanel.add(Box.createGlue());
 		registerPanel.add(title,BorderLayout.PAGE_START);
-
+		
 		accountLabels.add(usernameLabel);
 		accountLabels.add(passwordLabel);
 		accountLabels.add(retypePasswordLabel);
@@ -79,6 +102,17 @@ public class RegisterScreen{
 		registerPanel.add(accountInfo);
 		registerPanel.add(Box.createGlue());
 		
+	}
+	
+	public void registerClicked(){
+		//check if username is okay
+		//check if password is valid
+		//check if passwords match
+		//check if email is okay
+	}
+	
+	public void cancelClicked(){
+		manager.changeScreen("login");
 	}
 	
 	public void loadScreen(){
