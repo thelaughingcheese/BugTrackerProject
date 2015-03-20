@@ -125,7 +125,7 @@ public class LoginScreen extends Screen{
 		//login!
 		session.username = user;
 		errorLabel.setText("");
-		manager.changeScreen("login");
+		manager.changeScreen("overview");
 	}
 	
 	public void registerClicked(){
