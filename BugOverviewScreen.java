@@ -3,12 +3,23 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 
-public class BugOverviewScreen{
-	private JFrame parentFrame;
-	private ScreenManager manager;
+public class BugOverviewScreen extends Screen{
+	private JLabel title;
 	
-	private JPanel loginPanel;
+	public BugOverviewScreen(JFrame parent, ScreenManager man, LoginSession sess){
+		super(parent,man,sess);
+	}
 	
-	public void loadScreen(){
+	protected void loadScreenPre(){
+	}
+	
+	protected void setupGUI(){
+		//create components
+		title = new JLabel("Overview",JLabel.CENTER);
+		
+		
+		//configure components
+		//configure events
+		//organize components into containers
 	}
 }
