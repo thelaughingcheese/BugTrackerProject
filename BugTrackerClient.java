@@ -8,6 +8,7 @@ public class BugTrackerClient{
 	private LoginScreen loginScreen;
 	private RegisterScreen registerScreen;
 	private BugOverviewScreen bugOverviewScreen;
+	private AccountSettingsScreen accountSettingsScreen;
 
 	public BugTrackerClient(){
 		screenManager = new ClientScreenManager();
@@ -17,10 +18,12 @@ public class BugTrackerClient{
 		loginScreen = new LoginScreen(mainFrame, screenManager, loginSession);
 		registerScreen = new RegisterScreen(mainFrame,screenManager);
 		bugOverviewScreen = new BugOverviewScreen(mainFrame, screenManager, loginSession);
+		accountSettingsScreen = new AccountSettingsScreen(mainFrame, screenManager, loginSession);
 		
 		loginScreen.loadScreen();
 		//registerScreen.loadScreen();
 		//bugOverviewScreen.loadScreen();
+		//accountSettingsScreen.loadScreen();
 		mainFrame.setVisible(true);
 	}
 	
@@ -47,6 +50,9 @@ public class BugTrackerClient{
 			}
 			else if(screen.equals("overview")){
 				bugOverviewScreen.loadScreen();
+			}
+			else if(screen.equals("account settings")){
+				accountSettingsScreen.loadScreen();
 			}
 			else{
 				System.out.println("Unknown screen: " + screen);
