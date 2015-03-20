@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
+import java.util.Arrays;
 
 public class RegisterScreen extends Screen{
 	private JLabel title;
@@ -114,9 +115,64 @@ public class RegisterScreen extends Screen{
 	}
 	
 	public void registerClicked(){
-		//check if username is okay
-		//check if password is valid
+		String name = username.getText();
+		//make sure username is valid
+		if((name.contains("/")) || (name.contains("\\")) || (name.contains("<")) || (name.contains(">")) || 
+				(name.contains(":")) || (name.contains("*")) || (name.contains("\"")) || (name.contains("|")))
+		{
+			errorLabel.setText("Name may not contain \\ / < > : * \" |");
+			registerPanel.add(errorLabel);
+			parentFrame.getContentPane().validate();
+			return;
+		}
+		
+		//error if name not entered
+		if(name.equals(""))
+		{
+			errorLabel.setText("Name not entered.");
+			registerPanel.add(errorLabel);
+			parentFrame.getContentPane().validate();
+			return;
+		}
+		
+		//check if username is already taken
+		String dir = System.getProperty("user.dir");
+		if(new File(dir + "\\src\\" + name + ".txt").exists())
+		{
+			errorLabel.setText("Name already taken.");
+			registerPanel.add(errorLabel);
+			parentFrame.getContentPane().validate();
+			return;
+		}
+		//check if password is empty
+		char[] dud = "".toCharArray();
+		if(Arrays.equals(dud,password.getPassword()))
+		{
+			errorLabel.setText("The password field is empty");
+			registerPanel.add(errorLabel);
+			parentFrame.getContentPane().validate();
+			return;
+		}
+		//check if retypePassword is empty
+		if(Arrays.equals(dud,retypePassword.getPassword()))
+		{
+		    errorLabel.setText("The retype password field is empty");
+			registerPanel.add(errorLabel);
+			parentFrame.getContentPane().validate();
+			return;
+		}
+		
 		//check if passwords match
+		if(!Arrays.equals(password.getPassword(),retypePassword.getPassword()))
+		{
+			errorLabel.setText("Passwords don't match.");
+			registerPanel.add(errorLabel);
+			parentFrame.getContentPane().validate();
+			return;
+		}
+		errorLabel.setText("");
+		parentFrame.getContentPane().validate();
+		System.out.println(new File(dir).getAbsolutePath() + "\\" + name);
 		//check if email is okay
 	}
 
