@@ -46,8 +46,6 @@ public class RegisterScreen extends Screen{
 
 	protected void setupGUI(){
 		//create components
-		title = new JLabel("Register",JLabel.CENTER);
-
 		accountInfo = new JPanel();
 		accountLabels = new JPanel();
 		accountFields = new JPanel();
@@ -121,7 +119,7 @@ public class RegisterScreen extends Screen{
 				(name.contains(":")) || (name.contains("*")) || (name.contains("\"")) || (name.contains("|")))
 		{
 			errorLabel.setText("Name may not contain \\ / < > : * \" |");
-			registerPanel.add(errorLabel);
+			mainContentPanel.add(errorLabel);
 			parentFrame.getContentPane().validate();
 			return;
 		}
@@ -130,7 +128,7 @@ public class RegisterScreen extends Screen{
 		if(name.equals(""))
 		{
 			errorLabel.setText("Name not entered.");
-			registerPanel.add(errorLabel);
+			mainContentPanel.add(errorLabel);
 			parentFrame.getContentPane().validate();
 			return;
 		}
@@ -140,7 +138,7 @@ public class RegisterScreen extends Screen{
 		if(new File(dir + "\\src\\" + name + ".txt").exists())
 		{
 			errorLabel.setText("Name already taken.");
-			registerPanel.add(errorLabel);
+			mainContentPanel.add(errorLabel);
 			parentFrame.getContentPane().validate();
 			return;
 		}
@@ -149,7 +147,7 @@ public class RegisterScreen extends Screen{
 		if(Arrays.equals(dud,password.getPassword()))
 		{
 			errorLabel.setText("The password field is empty");
-			registerPanel.add(errorLabel);
+			mainContentPanel.add(errorLabel);
 			parentFrame.getContentPane().validate();
 			return;
 		}
@@ -157,7 +155,7 @@ public class RegisterScreen extends Screen{
 		if(Arrays.equals(dud,retypePassword.getPassword()))
 		{
 		    errorLabel.setText("The retype password field is empty");
-			registerPanel.add(errorLabel);
+			mainContentPanel.add(errorLabel);
 			parentFrame.getContentPane().validate();
 			return;
 		}
@@ -166,7 +164,7 @@ public class RegisterScreen extends Screen{
 		if(!Arrays.equals(password.getPassword(),retypePassword.getPassword()))
 		{
 			errorLabel.setText("Passwords don't match.");
-			registerPanel.add(errorLabel);
+			mainContentPanel.add(errorLabel);
 			parentFrame.getContentPane().validate();
 			return;
 		}
