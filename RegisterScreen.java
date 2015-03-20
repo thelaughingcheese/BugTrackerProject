@@ -3,10 +3,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 
-public class RegisterScreen{
-	private JFrame parentFrame;
-	private ScreenManager manager;
-	private JPanel registerPanel;
+public class RegisterScreen extends Screen{
 	private JLabel title;
 	private JPanel accountInfo;
 	private JPanel accountLabels;
@@ -24,9 +21,7 @@ public class RegisterScreen{
 	private JButton cancelButton;
 
 	public RegisterScreen(JFrame parent, ScreenManager man){
-		parentFrame = parent;
-		manager = man;
-		setupGUI();
+		super(parent, man);
 	}
 
 	private class buttonListener implements ActionListener{
@@ -48,9 +43,10 @@ public class RegisterScreen{
 		}
 	}
 
-	private void setupGUI(){
+	protected void setupGUI(){
 		//create components
-		registerPanel = new JPanel();
+		title = new JLabel("Register",JLabel.CENTER);
+
 		accountInfo = new JPanel();
 		accountLabels = new JPanel();
 		accountFields = new JPanel();
@@ -76,7 +72,7 @@ public class RegisterScreen{
 		cancelButton = new JButton("cancel");
 		
 		//configure components
-		registerPanel.setLayout(new BoxLayout(registerPanel,BoxLayout.Y_AXIS));
+		mainContentPanel.setLayout(new BoxLayout(mainContentPanel,BoxLayout.Y_AXIS));
 		accountInfo.setLayout(new FlowLayout());
 		accountLabels.setLayout(new GridLayout(6,1,0,10));
 		accountFields.setLayout(new GridLayout(6,1));
@@ -88,9 +84,9 @@ public class RegisterScreen{
 		cancelButton.addActionListener(new buttonListener(this));
 
 		//add components
-		registerPanel.add(Box.createGlue());
-		registerPanel.add(title,BorderLayout.PAGE_START);
-	
+		mainContentPanel.add(Box.createGlue());
+		mainContentPanel.add(title,BorderLayout.PAGE_START);
+
 		accountLabels.add(usernameLabel);
 		accountLabels.add(passwordLabel);
 		accountLabels.add(retypePasswordLabel);
@@ -106,9 +102,17 @@ public class RegisterScreen{
 		accountInfo.add(accountLabels,BorderLayout.WEST);
 		accountInfo.add(accountFields,BorderLayout.CENTER);
 		
-		registerPanel.add(accountInfo);
-		registerPanel.add(Box.createGlue());
+		mainContentPanel.add(accountInfo);
+		mainContentPanel.add(errorLabel);
+		mainContentPanel.add(Box.createGlue());
 	}
+	
+	protected void loadScreenPre(){
+		username.setText("");
+		password.setText("");
+		retypePassword.setText("");
+	}
+	
 	public void registerClicked(){
 		//check if username is okay
 		//check if password is valid
