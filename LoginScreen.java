@@ -3,13 +3,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 
-public class LoginScreen{
-	private JFrame parentFrame;
-	private ScreenManager manager;
-	private LoginSession session;
-	
-	private JPanel loginPanel;
-	
+public class LoginScreen extends Screen{
 	private JLabel title;
 	
 	private JPanel loginInfo;
@@ -25,18 +19,12 @@ public class LoginScreen{
 	private JButton registerButton;
 	
 	public LoginScreen(JFrame parent, ScreenManager man, LoginSession sess){
-		parentFrame = parent;
-		manager = man;
-		session = sess;
-		
-		setupGUI();
+		super(parent, man, sess);
 	}
 	
-	public void loadScreen(){
+	protected void loadScreenPre(){
 		username.setText("");
 		password.setText("");
-		parentFrame.add(loginPanel);
-		parentFrame.getContentPane().validate();
 	}
 	
 	private class buttonListener implements ActionListener{
@@ -58,9 +46,7 @@ public class LoginScreen{
 		}
 	}
 	
-	private void setupGUI(){
-		loginPanel = new JPanel();
-		
+	protected void setupGUI(){
 		loginInfo = new JPanel();
 		loginLabels = new JPanel();
 		loginFields = new JPanel();
@@ -74,7 +60,7 @@ public class LoginScreen{
 		loginButton = new JButton("Login");
 		registerButton = new JButton("Register");
 		
-		loginPanel.setLayout(new BoxLayout(loginPanel,BoxLayout.Y_AXIS));
+		mainContentPanel.setLayout(new BoxLayout(mainContentPanel,BoxLayout.Y_AXIS));
 		loginInfo.setLayout(new FlowLayout());
 		loginLabels.setLayout(new GridLayout(0,1));
 		loginFields.setLayout(new GridLayout(0,1));
@@ -88,8 +74,8 @@ public class LoginScreen{
 		registerButton.addActionListener(new buttonListener(this));
 		
 		//add components
-		loginPanel.add(Box.createGlue());
-		loginPanel.add(title,BorderLayout.PAGE_START);
+		mainContentPanel.add(Box.createGlue());
+		mainContentPanel.add(title,BorderLayout.PAGE_START);
 		
 		loginLabels.add(usernameLabel);
 		loginLabels.add(passwordLabel);
@@ -101,9 +87,9 @@ public class LoginScreen{
 		loginInfo.add(loginButton);
 		loginInfo.add(registerButton);
 		
-		loginPanel.add(loginInfo,BorderLayout.CENTER);
-		loginPanel.add(errorLabel);
-		loginPanel.add(Box.createGlue());
+		mainContentPanel.add(loginInfo,BorderLayout.CENTER);
+		mainContentPanel.add(errorLabel);
+		mainContentPanel.add(Box.createGlue());
 	}
 	
 	public void loginClicked(){

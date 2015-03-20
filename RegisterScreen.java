@@ -3,12 +3,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 
-public class RegisterScreen{
-	private JFrame parentFrame;
-	private ScreenManager manager;
-	
-	private JPanel registerPanel;
-	
+public class RegisterScreen extends Screen{
 	private JLabel title;
 	
 	private JPanel accountInfo;
@@ -29,10 +24,7 @@ public class RegisterScreen{
 	private JButton cancelButton;
 	
 	public RegisterScreen(JFrame parent, ScreenManager man){
-		parentFrame = parent;
-		manager = man;
-		
-		setupGUI();
+		super(parent, man);
 	}
 	
 	private class buttonListener implements ActionListener{
@@ -54,10 +46,8 @@ public class RegisterScreen{
 		}
 	}
 	
-	private void setupGUI(){
+	protected void setupGUI(){
 		//create components
-		registerPanel = new JPanel();
-	
 		title = new JLabel("Register",JLabel.CENTER);
 		
 		accountInfo = new JPanel();
@@ -78,7 +68,7 @@ public class RegisterScreen{
 		cancelButton = new JButton("cancel");
 		
 		//configure components
-		registerPanel.setLayout(new BoxLayout(registerPanel,BoxLayout.Y_AXIS));
+		mainContentPanel.setLayout(new BoxLayout(mainContentPanel,BoxLayout.Y_AXIS));
 		accountLabels.setLayout(new GridLayout(0,1));
 		accountFields.setLayout(new GridLayout(0,1));
 		
@@ -89,8 +79,8 @@ public class RegisterScreen{
 		cancelButton.addActionListener(new buttonListener(this));
 		
 		//add components
-		registerPanel.add(Box.createGlue());
-		registerPanel.add(title);
+		mainContentPanel.add(Box.createGlue());
+		mainContentPanel.add(title);
 		
 		accountLabels.add(usernameLabel);
 		accountLabels.add(passwordLabel);
@@ -107,17 +97,15 @@ public class RegisterScreen{
 		accountInfo.add(registerButton);
 		accountInfo.add(cancelButton);
 		
-		registerPanel.add(accountInfo);
-		registerPanel.add(errorLabel);
-		registerPanel.add(Box.createGlue());
+		mainContentPanel.add(accountInfo);
+		mainContentPanel.add(errorLabel);
+		mainContentPanel.add(Box.createGlue());
 	}
 	
-	public void loadScreen(){
+	protected void loadScreenPre(){
 		username.setText("");
 		password.setText("");
 		retypePassword.setText("");
-		
-		parentFrame.add(registerPanel);
 	}
 	
 	public void registerClicked(){
