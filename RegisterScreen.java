@@ -64,9 +64,9 @@ public class RegisterScreen extends Screen{
 		retypePassword = new JPasswordField(20);
 		email = new JTextField(20);
 	
-		registerButton = new JButton("register");
-		cancelButton = new JButton("rancel");
-		errorLabel = new JLabel("",JLabel.CENTER);
+		registerButton = new JButton("Register");
+		cancelButton = new JButton("Cancel");
+		errorLabel = new JLabel("ERROR",JLabel.CENTER);
 		
 		registerButton = new JButton("register");
 		cancelButton = new JButton("cancel");
