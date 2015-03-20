@@ -123,11 +123,4 @@ public class RegisterScreen extends Screen{
 	public void cancelClicked(){
 		manager.changeScreen("login");
 	}
-
-	public void loadScreen(){
-		username.setText("");
-		password.setText("");
-		retypePassword.setText("");
-		parentFrame.add(registerPanel);
-	}
 }
