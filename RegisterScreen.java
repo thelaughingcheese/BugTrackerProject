@@ -66,7 +66,7 @@ public class RegisterScreen extends Screen{
 	
 		registerButton = new JButton("Register");
 		cancelButton = new JButton("Cancel");
-		errorLabel = new JLabel("ERROR",JLabel.CENTER);
+		errorLabel = new JLabel("",JLabel.CENTER);
 		
 		registerButton = new JButton("register");
 		cancelButton = new JButton("cancel");
