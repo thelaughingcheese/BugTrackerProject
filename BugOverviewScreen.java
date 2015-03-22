@@ -94,7 +94,7 @@ public class BugOverviewScreen extends Screen{
 	}
 	
 	public void logoutClicked(){
-		System.out.println("logout");
+		session.logout();
 	}
 	
 	public void newReportClicked(){

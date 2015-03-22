@@ -96,34 +96,22 @@ public class LoginScreen extends Screen{
 		String user = username.getText();
 		String pass = password.getText();
 		
-		FileInputStream userFile;
-		BufferedReader reader;
-		//check username
-		try{
-			userFile = new FileInputStream("users/"+user);
-			reader = new BufferedReader(new InputStreamReader(userFile));
-		}
-		catch(FileNotFoundException e){
+		Account account = new Account();
+		if(!account.setUsername(user)){
 			errorLabel.setText("Invalid Login");
 			return;
 		}
 		
-		//check password
-		try{
-			String line = reader.readLine();
-			if(line != null && !line.equals(pass)){
-				errorLabel.setText("Invalid Login");
-				return;
-			}
-			reader.close();
-			userFile.close();
+		if(!account.checkPassword(pass)){
+			errorLabel.setText("Invalid Login");
+			return;
 		}
-		catch(IOException e){
-			System.out.println("Unexpected password read error");
-		}
-		
+
 		//login!
-		session.username = user;
+		session.account = new Account();
+		if(!session.account.setUsername(user)){
+			System.out.println("unexpected error setting user session!");
+		};
 		errorLabel.setText("");
 		manager.changeScreen("overview");
 	}

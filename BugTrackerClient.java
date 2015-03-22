@@ -12,7 +12,7 @@ public class BugTrackerClient{
 
 	public BugTrackerClient(){
 		screenManager = new ClientScreenManager();
-		loginSession = new LoginSession();
+		loginSession = new LoginSession(screenManager);
 	
 		setupMainFrame();
 		loginScreen = new LoginScreen(mainFrame, screenManager, loginSession);
@@ -42,7 +42,6 @@ public class BugTrackerClient{
 		public void changeScreen(String screen){
 			clearScreen();
 			if(screen.equals("login")){
-				System.out.println("Login and go to bug overview");
 				loginScreen.loadScreen();
 			}
 			else if(screen.equals("register")){
