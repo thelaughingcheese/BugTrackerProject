@@ -3,13 +3,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 
-public class LoginScreen{
-	private JFrame parentFrame;
-	private ScreenManager manager;
-	private LoginSession session;
-	
-	private JPanel loginPanel;
-	
+public class LoginScreen extends Screen{
 	private JLabel title;
 	
 	private JPanel loginInfo;
@@ -25,17 +19,12 @@ public class LoginScreen{
 	private JButton registerButton;
 	
 	public LoginScreen(JFrame parent, ScreenManager man, LoginSession sess){
-		parentFrame = parent;
-		manager = man;
-		session = sess;
-		
-		setupGUI();
+		super(parent, man, sess);
 	}
 	
-	public void loadScreen(){
+	protected void loadScreenPre(){
 		username.setText("");
 		password.setText("");
-		parentFrame.add(loginPanel);
 	}
 	
 	private class buttonListener implements ActionListener{
@@ -57,9 +46,7 @@ public class LoginScreen{
 		}
 	}
 	
-	private void setupGUI(){
-		loginPanel = new JPanel();
-		
+	protected void setupGUI(){
 		loginInfo = new JPanel();
 		loginLabels = new JPanel();
 		loginFields = new JPanel();
@@ -73,7 +60,7 @@ public class LoginScreen{
 		loginButton = new JButton("Login");
 		registerButton = new JButton("Register");
 		
-		loginPanel.setLayout(new BoxLayout(loginPanel,BoxLayout.Y_AXIS));
+		mainContentPanel.setLayout(new BoxLayout(mainContentPanel,BoxLayout.Y_AXIS));
 		loginInfo.setLayout(new FlowLayout());
 		loginLabels.setLayout(new GridLayout(0,1));
 		loginFields.setLayout(new GridLayout(0,1));
@@ -86,8 +73,9 @@ public class LoginScreen{
 		loginButton.addActionListener(new buttonListener(this));
 		registerButton.addActionListener(new buttonListener(this));
 		
-		loginPanel.add(Box.createGlue());
-		loginPanel.add(title,BorderLayout.PAGE_START);
+		//add components
+		mainContentPanel.add(Box.createGlue());
+		mainContentPanel.add(title,BorderLayout.PAGE_START);
 		
 		loginLabels.add(usernameLabel);
 		loginLabels.add(passwordLabel);
@@ -98,46 +86,34 @@ public class LoginScreen{
 		loginInfo.add(loginFields,BorderLayout.CENTER);
 		loginInfo.add(loginButton);
 		loginInfo.add(registerButton);
-		loginPanel.add(loginInfo,BorderLayout.CENTER);
 		
-		loginPanel.add(errorLabel);
-		loginPanel.add(Box.createGlue());
+		mainContentPanel.add(loginInfo,BorderLayout.CENTER);
+		mainContentPanel.add(errorLabel);
+		mainContentPanel.add(Box.createGlue());
 	}
 	
 	public void loginClicked(){
 		String user = username.getText();
 		String pass = password.getText();
 		
-		FileInputStream userFile;
-		BufferedReader reader;
-		//check username
-		try{
-			userFile = new FileInputStream("users/"+user);
-			reader = new BufferedReader(new InputStreamReader(userFile));
-		}
-		catch(FileNotFoundException e){
+		Account account = new Account();
+		if(!account.setUsername(user)){
 			errorLabel.setText("Invalid Login");
 			return;
 		}
 		
-		//check password
-		try{
-			String line = reader.readLine();
-			if(line != null && !line.equals(pass)){
-				errorLabel.setText("Invalid Login");
-				return;
-			}
-			reader.close();
-			userFile.close();
+		if(!account.checkPassword(pass)){
+			errorLabel.setText("Invalid Login");
+			return;
 		}
-		catch(IOException e){
-			System.out.println("Unexpected password read error");
-		}
-		
+
 		//login!
-		session.username = user;
+		session.account = new Account();
+		if(!session.account.setUsername(user)){
+			System.out.println("unexpected error setting user session!");
+		};
 		errorLabel.setText("");
-		manager.changeScreen("login");
+		manager.changeScreen("overview");
 	}
 	
 	public void registerClicked(){
