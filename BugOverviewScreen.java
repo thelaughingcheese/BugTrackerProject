@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
+import java.util.*;
 
 public class BugOverviewScreen extends Screen{
 	private JLabel title;
@@ -10,17 +11,25 @@ public class BugOverviewScreen extends Screen{
 	private JPanel toolbar;
 	
 	private JScrollPane bugViewer;
+	private JPanel bugViewerContent;
 	
 	private JButton accountSettingsButton;
 	private JButton logoutButton;
 	
 	private JButton newReportButton;
 	
+	private ArrayList<BugReport> reports;
+	private ArrayList<BugReportGuiTile> reportTiles;
+	
 	public BugOverviewScreen(JFrame parent, ScreenManager man, LoginSession sess){
 		super(parent,man,sess);
+		
+		reportTiles = new ArrayList<BugReportGuiTile>();
+		reports = new ArrayList<BugReport>();
 	}
 	
 	protected void loadScreenPre(){
+		updateBugReportList();
 	}
 	
 	private class buttonListener implements ActionListener{
@@ -53,6 +62,7 @@ public class BugOverviewScreen extends Screen{
 		toolbar = new JPanel();
 		
 		bugViewer = new JScrollPane();
+		bugViewerContent = new JPanel();
 		
 		accountSettingsButton = new JButton("Account Settings");
 		logoutButton = new JButton("Logout");
@@ -66,6 +76,8 @@ public class BugOverviewScreen extends Screen{
 		toolbar.setLayout(new FlowLayout());
 		
 		title.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		bugViewerContent.setLayout(new BoxLayout(bugViewerContent,BoxLayout.Y_AXIS));
 		
 		//configure events
 		accountSettingsButton.setActionCommand("account settings");
@@ -83,10 +95,23 @@ public class BugOverviewScreen extends Screen{
 		titlebar.add(accountSettingsButton,BorderLayout.WEST);
 		toolbar.add(newReportButton);
 		
-		bugViewer.getViewport().add(new JLabel("DERRRRRRRRRRRRRRRRPPPPPPPRRRRRPPPPPPPRRRRRPPPPPPPRRRRRPPPPPPPRRRRRPPPPPPPRRRRRPPPPPPPRRRRRPPPPPPPRRRRRPPPPPPPRRRRRPPPPPPPRRRRRPPPPPPPRRRPPPPPPPPPPPPPPPP"));
+		bugViewer.getViewport().add(bugViewerContent);
 		
 		mainContentPanel.add(header,BorderLayout.PAGE_START);
 		mainContentPanel.add(bugViewer,BorderLayout.CENTER);
+	}
+	
+	public void updateBugReportList(){
+		//clear current bug viewer
+		bugViewerContent.removeAll();
+		//retrieve bug reports
+		//load bug reports
+		//create gui tiles
+		for(int i=0;i<40;i++){
+			BugReportGuiTile newTile = new BugReportGuiTile();
+			reportTiles.add(newTile);
+			bugViewerContent.add(newTile.getContentPanel());
+		}
 	}
 	
 	public void accountSettingsClicked(){
