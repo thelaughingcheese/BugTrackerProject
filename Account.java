@@ -7,9 +7,15 @@ public class Account{
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	
+
 	public Account(){
 	}
 	
+	/**
+	*sets the username for the user
+	*@param changes username to user
+	*@return returns true if succuessfully changed. Returns false otherwise.
+	*/
 	public boolean setUsername(String user){
 		if(!openUserFileRead(user)){
 			return false;
@@ -20,7 +26,11 @@ public class Account{
 		username = user;
 		return true;
 	}
-	
+	/**
+	*Checks the to see if the users password is correct.
+	*@param password to be compared with
+	*@return returns true if the inputed password is the same as "pass". Otherwise return false.
+	*/
 	public boolean checkPassword(String pass){
 		boolean passCorrect = false;
 		if(!openUserFileRead(username)){
@@ -56,7 +66,12 @@ public class Account{
 	public String getEmail(){
 		return "none";
 	}
-	
+
+	/**
+	*changes the password of the user
+	*@param new desired password
+	*@return returns false only if an error occurs. i.e file is not open for read or write. 
+	*/
 	public boolean changePassword(String newPass){
 		if(!openUserFileRead(username)){
 			System.out.println("Tried checking password of invalid username");
@@ -97,7 +112,12 @@ public class Account{
 	
 		return true;
 	}
-	
+
+	/**
+	*changes the email of the user.
+	*@param new desired email.
+	*@return returns false only if an error occurs. i.e file is not open for read or write. 
+	*/
 	public boolean changeEmail(String newEmail){
 		if(!openUserFileRead(username)){
 			System.out.println("Tried checking password of invalid username");
@@ -136,7 +156,11 @@ public class Account{
 	
 		return false;
 	}
-	
+	/**
+	*opens a file containing users information in the folder "user" for writing
+	*@param name of file in "users" folder (username)
+	*@return returns true if file is found and is open for writing. False otherwise.
+	*/
 	private boolean openUserFileWrite(String user){
 		try{
 			userFileWrite = new FileOutputStream("users/"+user);
@@ -147,7 +171,9 @@ public class Account{
 			return false;
 		}
 	}
-	
+	/**
+	*closes the user file for writing
+	*/
 	private void closeUserFileWrite(){
 		try{
 			writer.close();
@@ -157,7 +183,12 @@ public class Account{
 			System.out.println("Unexpected user file close error");
 		}
 	}
-	
+
+	/**
+	*Opens a file containg users information in the folder "users" for reading
+	*@param name of file in "users" folder (username)
+	*@return returns true if file is found and is open for reading. False otherwise.
+	*/
 	private boolean openUserFileRead(String user){
 		try{
 			userFile = new FileInputStream("users/"+user);
@@ -169,6 +200,9 @@ public class Account{
 		}
 	}
 	
+	/**
+	*Closes the user file for reading.
+	*/
 	private void closeUserFileRead(){
 		try{
 			reader.close();
