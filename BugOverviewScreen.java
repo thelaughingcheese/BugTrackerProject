@@ -18,6 +18,7 @@ public class BugOverviewScreen extends Screen{
 	
 	private JButton newReportButton;
 	
+	private ArrayList<Integer> reportIds;
 	private ArrayList<BugReport> reports;
 	private ArrayList<BugReportGuiTile> reportTiles;
 	
@@ -77,7 +78,7 @@ public class BugOverviewScreen extends Screen{
 		
 		title.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		bugViewerContent.setLayout(new BoxLayout(bugViewerContent,BoxLayout.Y_AXIS));
+		bugViewerContent.setLayout(new GridLayout(0,1));
 		
 		//configure events
 		accountSettingsButton.setActionCommand("account settings");
@@ -105,10 +106,16 @@ public class BugOverviewScreen extends Screen{
 		//clear current bug viewer
 		bugViewerContent.removeAll();
 		//retrieve bug reports
+		reportIds = BugReportDatabase.getBugReportIds();
+		
 		//load bug reports
+		for(int i=0;i<reportIds.size();i++){
+			reports.add(BugReportDatabase.getBugReport(reportIds.get(i)));
+		}
+		
 		//create gui tiles
-		for(int i=0;i<40;i++){
-			BugReportGuiTile newTile = new BugReportGuiTile();
+		for(int i=0;i<reports.size();i++){
+			BugReportGuiTile newTile = new BugReportGuiTile(reports.get(i));
 			reportTiles.add(newTile);
 			bugViewerContent.add(newTile.getContentPanel());
 		}

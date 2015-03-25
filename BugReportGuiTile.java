@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
+import java.text.*;
+import java.util.*;
 
 public class BugReportGuiTile{
 	private JPanel contentPanel;
@@ -11,7 +13,7 @@ public class BugReportGuiTile{
 	private JLabel lastEditedLabel;
 	private JLabel lastEditedTimeLabel;
 	
-	private JLabel status;
+	private JLabel statusLabel;
 	
 	private JPanel summary;
 	private JLabel titleLabel;
@@ -19,35 +21,75 @@ public class BugReportGuiTile{
 	
 	private JButton viewButton;
 	
-	public BugReportGuiTile(){	//accept account and action listener obj too
+	private String startingUser;
+	private String lastEditedUser;
+	private String lastEditedTime;
+	
+	private String status;
+	
+	private String title;
+	private String description;
+	
+	private BugReport bugReport;
+	
+	public BugReportGuiTile(BugReport report){	//accept account and action listener obj too
+		bugReport = report;
+		startingUser = "Started By: " + report.getAuthor(report.getFirstVersion());
+		lastEditedUser = "Last Edited By: " + report.getAuthor(report.getLatestVersion());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+		lastEditedTime = "Last Edited On: " + sdf.format(new Date(1000L*report.getTime(report.getLatestVersion())));
+	
+		if(report.isResolved()){
+			status = "Resolved";
+		}
+		else{
+			status = "Not Resolved";
+		}
+	
+		title = report.getTitle();
+		description = report.getDescription(report.getLatestVersion());
+	
 		setupGui();
 	}
 	
-	public setupGui(){
+	public void setupGui(){
 		//create components
 		contentPanel = new JPanel();
 		basicInfo = new JPanel();
-		startedLabel;
-		lastEditedLabel;
-		lastEditedTimeLabel;
+		startedLabel = new JLabel(startingUser);
+		lastEditedLabel = new JLabel(lastEditedUser);
+		lastEditedTimeLabel = new JLabel(lastEditedTime);
 		
-		status = new JLabel();
+		statusLabel = new JLabel(status);
 		
 		summary = new JPanel();
-		titleLabel;
-		descriptionLabel;
+		titleLabel = new JLabel(title);
+		descriptionLabel = new JLabel(description);
 	
-		viewButton = new JButton();
+		viewButton = new JButton("View Report");
 		
 		//init components
 		contentPanel.setLayout(new FlowLayout());
+		basicInfo.setLayout(new GridLayout(3,1));
+		summary.setLayout(new GridLayout(2,1));
 		
 		//add event listeners
 		
 		//add components
-		contentPanel.add(status);
+		basicInfo.add(startedLabel);
+		basicInfo.add(lastEditedLabel);
+		basicInfo.add(lastEditedTimeLabel);
+		
+		summary.add(titleLabel);
+		summary.add(descriptionLabel);
+		
 		contentPanel.add(basicInfo);
+		contentPanel.add(new JLabel("     "));
+		contentPanel.add(statusLabel);
+		contentPanel.add(new JLabel("     "));
 		contentPanel.add(summary);
+		contentPanel.add(new JLabel("     "));
 		contentPanel.add(viewButton);
 	}
 	
