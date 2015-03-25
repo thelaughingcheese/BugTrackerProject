@@ -65,6 +65,7 @@ public class AccountSettingsScreen extends Screen{
 			}
 		}
 	}
+
 	
 	protected void setupGUI(){
 		//create components
@@ -146,15 +147,26 @@ public class AccountSettingsScreen extends Screen{
 		mainContentPanel.add(header,BorderLayout.PAGE_START);
 		mainContentPanel.add(accountInfoHPadding,BorderLayout.CENTER);
 	}
-	
+
+	/**
+	*Confirms that you clicked the cancel button and moves the client back to the "overview" menu.
+	*/
 	public void cancelClicked(){
 		manager.changeScreen("overview");
 	}
 	
+	/**
+	*Confirms that you clicked the log out button and logs out of the current session.
+	*/
 	public void logoutClicked(){
 		session.logout();
 	}
 	
+	/**
+	*This function first checks to see you inputed your current password. It gets confirmation that 
+	*this is your current password in another input field. It then changes the users password at the last 
+	*input field.
+	*/
 	public void changePasswordClicked(){
 		//check current password
 		if(!session.account.checkPassword(currentPassword.getText())){
@@ -183,7 +195,9 @@ public class AccountSettingsScreen extends Screen{
 				"Password Changed!",
 				JOptionPane.WARNING_MESSAGE);
 	}
-	
+	/**
+	*This function gives a confirmation/warning message that the email was changed.
+	*/
 	public void changeEmailClicked(){
 		session.account.changeEmail(newEmail.getText());
 		JOptionPane.showMessageDialog(parentFrame,
