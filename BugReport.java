@@ -8,6 +8,9 @@ public class BugReport{
 	private FileInputStream inStream;
 	private BufferedReader reader;
 	
+	private FileOutputStream outStream;
+	private BufferedWriter writer;
+	
 	public BugReport(int id){
 		this.id = id;
 		
@@ -24,6 +27,27 @@ public class BugReport{
 		}
 
 		closeMetaDataRead();
+	}
+	
+	public void submitNewVersion(String user,String desc){
+		ArrayList<Integer> curVersions = getVersions();
+		int newVersionId = curVersions.get(curVersions.size() - 1) + 1;
+		long time = System.currentTimeMillis() / 1000L;
+		
+		openVersionWrite(newVersionId);
+		
+		try{
+			writer.write(user);
+			writer.newLine();
+			writer.write("" + time);
+			writer.newLine();
+			writer.write(desc);
+		}
+		catch(IOException e){
+			System.out.println("Unexpected Version Write");
+		}
+		
+		closeVersionWrite();
 	}
 	
 	public boolean isResolved(){
@@ -101,16 +125,23 @@ public class BugReport{
 		return getVersions().get(0);
 	}
 	
+	public int getId(){
+		return id;
+	}
+	
 	public String getTitle(){
 		return title;
 	}
 	
-	public String getDescription(int version){
+	public String getDescription(int version, boolean html){
 		if(!openVersionRead(version)){
 			return "DESC ERROR";
 		}
 		
-		String rtn = "<html>";
+		String rtn = "";
+		if(html){
+			rtn += "<html>";
+		}
 		try{
 			reader.readLine();
 			reader.readLine();
@@ -119,7 +150,10 @@ public class BugReport{
 				if(line == null){
 					break;
 				}
-				rtn += line + "<br>";
+				rtn += line;
+				if(html){
+					rtn += "<br>";
+				}
 			}
 		}
 		catch(IOException e){
@@ -206,6 +240,28 @@ public class BugReport{
 		try{
 			reader.close();
 			inStream.close();
+		}
+		catch(IOException e){
+			System.out.println("Unexpected report version file close error");
+		}
+	}
+	
+	private boolean openVersionWrite(int version){
+		try{
+			outStream = new FileOutputStream("reports/"+id+"/"+version);
+			writer = new BufferedWriter(new OutputStreamWriter(outStream));
+			return true;
+		}
+		catch(IOException e){
+			System.out.println("unexpected error writing report version");
+			return false;
+		}
+	}
+	
+	private void closeVersionWrite(){
+		try{
+			writer.close();
+			outStream.close();
 		}
 		catch(IOException e){
 			System.out.println("Unexpected report version file close error");

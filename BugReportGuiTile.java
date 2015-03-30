@@ -30,10 +30,14 @@ public class BugReportGuiTile{
 	private String title;
 	private String description;
 	
+	private LoginSession session;
+	private ScreenManager manager;
 	private BugReport bugReport;
 	
-	public BugReportGuiTile(BugReport report){	//accept account and action listener obj too
+	public BugReportGuiTile(BugReport report, LoginSession sess, ScreenManager man){	//accept account and action listener obj too
 		bugReport = report;
+		session = sess;
+		manager = man;
 		startingUser = "Started By: " + report.getAuthor(report.getFirstVersion());
 		lastEditedUser = "Last Edited By: " + report.getAuthor(report.getLatestVersion());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
@@ -48,9 +52,22 @@ public class BugReportGuiTile{
 		}
 	
 		title = report.getTitle();
-		description = report.getDescription(report.getLatestVersion());
+		description = report.getDescription(report.getLatestVersion(),true);
 	
 		setupGui();
+	}
+	
+	private class buttonListener implements ActionListener{
+		private BugReportGuiTile parent;
+
+		public buttonListener(BugReportGuiTile p){
+			super();
+			parent = p;
+		}	
+
+		public void actionPerformed(ActionEvent e){
+			parent.viewClicked();
+		}
 	}
 	
 	public void setupGui(){
@@ -75,6 +92,7 @@ public class BugReportGuiTile{
 		summary.setLayout(new GridLayout(2,1));
 		
 		//add event listeners
+		viewButton.addActionListener(new buttonListener(this));
 		
 		//add components
 		basicInfo.add(startedLabel);
@@ -95,5 +113,10 @@ public class BugReportGuiTile{
 	
 	public JPanel getContentPanel(){
 		return contentPanel;
+	}
+	
+	public void viewClicked(){
+		session.activeReport = bugReport;
+		manager.changeScreen("report editor");
 	}
 }
