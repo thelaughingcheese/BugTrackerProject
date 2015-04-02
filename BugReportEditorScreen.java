@@ -16,6 +16,9 @@ public class BugReportEditorScreen extends Screen{
 	private JLabel descriptionLabel;
 	private JTextArea description;
 	
+	private String[] resolutionOptions;
+	private JComboBox resolution;
+	
 	private JButton cancelButton;
 	private JButton submitButton;
 	
@@ -28,12 +31,19 @@ public class BugReportEditorScreen extends Screen{
 			reportId.setText("Available once submitted");
 			reportTitle.setText("");
 			description.setText("");
+			resolution.setSelectedIndex(0);
 			reportTitle.setEditable(true);
 		}
 		else{
 			reportId.setText("" + session.activeReport.getId());
 			reportTitle.setText(session.activeReport.getTitle());
 			description.setText(session.activeReport.getDescription(session.activeReport.getLatestVersion(),false));
+			if(session.activeReport.isResolved()){
+				resolution.setSelectedIndex(1);
+			}
+			else{
+				resolution.setSelectedIndex(0);
+			}
 			reportTitle.setEditable(false);
 		}
 	}
@@ -71,6 +81,9 @@ public class BugReportEditorScreen extends Screen{
 		descriptionLabel = new JLabel("Description: ", JLabel.RIGHT);
 		description = new JTextArea("");
 	
+		String[] resolutionOptions = {"Unresolved","Resolved"};
+		resolution = new JComboBox(resolutionOptions);
+	
 		cancelButton = new JButton("Cancel");
 		submitButton = new JButton("Submit");
 		
@@ -78,6 +91,8 @@ public class BugReportEditorScreen extends Screen{
 		mainContentPanel.setLayout(new BorderLayout());
 		reportDetails.setLayout(new GridLayout(3,2));
 		footer.setLayout(new FlowLayout());
+		
+		resolution.setSelectedIndex(0);
 		
 		//configure events
 		cancelButton.setActionCommand("cancel");
@@ -92,6 +107,7 @@ public class BugReportEditorScreen extends Screen{
 		reportDetails.add(reportTitle);
 		reportDetails.add(descriptionLabel);
 		reportDetails.add(description);
+		reportDetails.add(resolution);
 		
 		footer.add(cancelButton);
 		footer.add(submitButton);
@@ -118,7 +134,14 @@ public class BugReportEditorScreen extends Screen{
 				return;
 			}
 			else{
-				session.activeReport.submitNewVersion(session.account.getUsername(),description.getText());
+				boolean isResolved;
+				if(resolution.getSelectedItem().equals("Resolved")){
+					isResolved = true;
+				}
+				else{
+					isResolved = false;
+				}
+				session.activeReport.submitNewVersion(session.account.getUsername(),description.getText(),isResolved);
 			}
 		}
 		manager.changeScreen("overview");

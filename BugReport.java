@@ -26,13 +26,42 @@ public class BugReport{
 			System.out.println("Unexpected title read error");
 		}
 
+
 		closeMetaDataRead();
 	}
 	
-	public void submitNewVersion(String user,String desc){
+	public void submitNewVersion(String user,String desc,boolean resolution){
 		ArrayList<Integer> curVersions = getVersions();
 		int newVersionId = curVersions.get(curVersions.size() - 1) + 1;
 		long time = System.currentTimeMillis() / 1000L;
+		
+		//------------write resolution
+		String title = getTitle();
+		String res;
+		if(resolution){
+			res = "resolved";
+		}
+		else{
+			res = "unresolved";
+		}
+		ArrayList<String> subscribers = getSubscribedUsers();
+		
+		openMetaDataWrite();
+		
+		try{
+			writer.write(title);
+			writer.newLine();
+			writer.write(res);
+			for(int i=0;i<subscribers.size();i++){
+				writer.newLine();
+				writer.write(subscribers.get(i));
+			}
+		}
+		catch(IOException e){
+			System.out.println("Unexpected Metadata Write");
+		}
+		
+		closeMetaDataWrite();
 		
 		openVersionWrite(newVersionId);
 		
@@ -218,6 +247,28 @@ public class BugReport{
 		try{
 			reader.close();
 			inStream.close();
+		}
+		catch(IOException e){
+			System.out.println("Unexpected report metadata file close error");
+		}
+	}
+	
+	private boolean openMetaDataWrite(){
+		try{
+			outStream = new FileOutputStream("reports/"+id+"/metadata");
+			writer = new BufferedWriter(new OutputStreamWriter(outStream));
+			return true;
+		}
+		catch(IOException e){
+			System.out.println("unexpected error writing report metadata");
+			return false;
+		}
+	}
+	
+	private void closeMetaDataWrite(){
+		try{
+			writer.close();
+			outStream.close();
 		}
 		catch(IOException e){
 			System.out.println("Unexpected report metadata file close error");
