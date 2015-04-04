@@ -178,14 +178,14 @@ public class RegisterScreen extends Screen{
 		} catch(AddressException e)
 		{
 			errorLabel.setText("Invalid email address.");
-			registerPanel.add(errorLabel);
+			//registerPanel.add(errorLabel);
 			parentFrame.getContentPane().validate();
 			return;
 		}
 		
 		// create text file for account
 		 try {
-	            File file = new File(name + ".txt");
+	            File file = new File("users/"+name);
 	            BufferedWriter output = new BufferedWriter(new FileWriter(file));
 	            output.write(password.getPassword());
 	            output.newLine();
