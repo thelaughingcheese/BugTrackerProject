@@ -4,6 +4,8 @@ import java.awt.*;
 import java.io.*;
 
 public class BugReportEditorScreen extends Screen{
+	private	JPanel pageContent;
+	private	JPanel pageContent2;
 	private JPanel reportDetails;
 	private JPanel footer;
 
@@ -69,17 +71,19 @@ public class BugReportEditorScreen extends Screen{
 	
 	protected void setupGUI(){
 		//create components
+		pageContent = new JPanel();
+		pageContent2 = new JPanel();
 		reportDetails = new JPanel();
 		footer = new JPanel();
 		
-		title = new JLabel("Editor!");
+		title = new JLabel("Report Editor");
 		
 		reportIdLabel = new JLabel("Report ID: ", JLabel.RIGHT);
 		reportId = new JLabel("Not set");
 		reportTitleLabel = new JLabel("Bug: ", JLabel.RIGHT);
-		reportTitle = new JTextField("Not set");
+		reportTitle = new JTextField(32);
 		descriptionLabel = new JLabel("Description: ", JLabel.RIGHT);
-		description = new JTextArea("");
+		description = new JTextArea(10,20);
 	
 		String[] resolutionOptions = {"Unresolved","Resolved"};
 		resolution = new JComboBox(resolutionOptions);
@@ -89,10 +93,14 @@ public class BugReportEditorScreen extends Screen{
 		
 		//configure components
 		mainContentPanel.setLayout(new BorderLayout());
-		reportDetails.setLayout(new GridLayout(3,2));
+		pageContent.setLayout(new FlowLayout());
+		pageContent2.setLayout(new BoxLayout(pageContent2,BoxLayout.Y_AXIS));
+		reportDetails.setLayout(new GridLayout(0,2));
 		footer.setLayout(new FlowLayout());
 		
 		resolution.setSelectedIndex(0);
+		title.setFont(title.getFont().deriveFont(16f));
+		title.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		//configure events
 		cancelButton.setActionCommand("cancel");
@@ -106,14 +114,25 @@ public class BugReportEditorScreen extends Screen{
 		reportDetails.add(reportTitleLabel);
 		reportDetails.add(reportTitle);
 		reportDetails.add(descriptionLabel);
-		reportDetails.add(description);
-		reportDetails.add(resolution);
+		
+		pageContent2.add(new JLabel(" "));
+		pageContent2.add(new JLabel(" "));
+		pageContent2.add(new JLabel(" "));
+		pageContent2.add(new JLabel(" "));
+		
+		pageContent2.add(reportDetails);
+		pageContent.add(pageContent2);
+		
+		pageContent2.add(description);
+		
+		pageContent2.add(new JLabel(""));
+		pageContent2.add(resolution);
 		
 		footer.add(cancelButton);
 		footer.add(submitButton);
 		
 		mainContentPanel.add(title,BorderLayout.NORTH);
-		mainContentPanel.add(reportDetails,BorderLayout.CENTER);
+		mainContentPanel.add(pageContent,BorderLayout.CENTER);
 		mainContentPanel.add(footer,BorderLayout.SOUTH);
 	}
 	
