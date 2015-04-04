@@ -112,6 +112,7 @@ public class RegisterScreen extends Screen{
 		username.setText("");
 		password.setText("");
 		retypePassword.setText("");
+		email.setText("");
 	}
 	
 	public void registerClicked(){
