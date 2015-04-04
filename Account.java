@@ -54,7 +54,24 @@ public class Account{
 	}
 	
 	public String getEmail(){
-		return "none";
+		String e = "";
+		if(!openUserFileRead(username)){
+			System.out.println("could not get email, error, could not open file");
+			return "none";
+		}
+		
+		try{
+			reader.readLine();
+			e = reader.readLine();
+		}
+		catch(IOException ex){
+			System.out.println("Unexpected email read error");
+			e = "none";
+		}
+		
+		closeUserFileRead();
+		
+		return e;
 	}
 	
 	public boolean changePassword(String newPass){
