@@ -20,6 +20,7 @@ public class BugReportGuiTile{
 	private JLabel descriptionLabel;
 	
 	private JButton viewButton;
+	private JButton subscribeButton;
 	
 	private String startingUser;
 	private String lastEditedUser;
@@ -66,7 +67,13 @@ public class BugReportGuiTile{
 		}	
 
 		public void actionPerformed(ActionEvent e){
-			parent.viewClicked();
+			String command = e.getActionCommand();
+			if(command.equals("view")){
+				parent.viewClicked();
+			}
+			else if(command.equals("sub")){
+				parent.subClicked();
+			}
 		}
 	}
 	
@@ -85,14 +92,25 @@ public class BugReportGuiTile{
 		descriptionLabel = new JLabel(description);
 	
 		viewButton = new JButton("View Report");
+		subscribeButton = new JButton("");
 		
 		//init components
 		contentPanel.setLayout(new FlowLayout());
 		basicInfo.setLayout(new GridLayout(3,1));
 		summary.setLayout(new GridLayout(2,1));
 		
+		if(bugReport.isSubscribed(session.account.getUsername())){
+			subscribeButton.setText("Unsubscribe");
+		}
+		else{
+			subscribeButton.setText("Subscribe");
+		}
+		
 		//add event listeners
+		viewButton.setActionCommand("view");
 		viewButton.addActionListener(new buttonListener(this));
+		subscribeButton.setActionCommand("sub");
+		subscribeButton.addActionListener(new buttonListener(this));
 		
 		//add components
 		basicInfo.add(startedLabel);
@@ -109,6 +127,7 @@ public class BugReportGuiTile{
 		contentPanel.add(summary);
 		contentPanel.add(new JLabel("     "));
 		contentPanel.add(viewButton);
+		contentPanel.add(subscribeButton);
 	}
 	
 	public JPanel getContentPanel(){
@@ -118,5 +137,16 @@ public class BugReportGuiTile{
 	public void viewClicked(){
 		session.activeReport = bugReport;
 		manager.changeScreen("report editor");
+	}
+	
+	public void subClicked(){
+		if(bugReport.isSubscribed(session.account.getUsername())){
+			subscribeButton.setText("Subscribe");
+			bugReport.changeSubscription(session.account.getUsername(),false);
+		}
+		else{
+			subscribeButton.setText("Unsubscribe");
+			bugReport.changeSubscription(session.account.getUsername(),true);
+		}
 	}
 }
