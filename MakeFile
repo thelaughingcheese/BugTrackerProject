@@ -1,2 +1,2 @@
 all: 
-	javac -cp ".;mail.jar;" *.java
+	javac -cp ".;mail.jar;activation.jar" *.java

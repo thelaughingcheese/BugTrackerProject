@@ -105,6 +105,8 @@ public class BugOverviewScreen extends Screen{
 	public void updateBugReportList(){
 		//clear current bug viewer
 		bugViewerContent.removeAll();
+		reportTiles = new ArrayList<BugReportGuiTile>();
+		reports = new ArrayList<BugReport>();
 		//retrieve bug reports
 		reportIds = BugReportDatabase.getBugReportIds();
 		
@@ -115,7 +117,7 @@ public class BugOverviewScreen extends Screen{
 		
 		//create gui tiles
 		for(int i=0;i<reports.size();i++){
-			BugReportGuiTile newTile = new BugReportGuiTile(reports.get(i));
+			BugReportGuiTile newTile = new BugReportGuiTile(reports.get(i),session, manager);
 			reportTiles.add(newTile);
 			bugViewerContent.add(newTile.getContentPanel());
 		}
@@ -130,6 +132,7 @@ public class BugOverviewScreen extends Screen{
 	}
 	
 	public void newReportClicked(){
-		System.out.println("new report screen");
+		session.activeReport = null;
+		manager.changeScreen("report editor");
 	}
 }

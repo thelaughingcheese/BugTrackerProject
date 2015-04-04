@@ -1,1 +1,1 @@
-java -cp ".;mail.jar;" BugTracker
+java -cp ".;mail.jar;activation.jar" BugTracker
