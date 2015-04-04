@@ -86,10 +86,10 @@ public class AccountSettingsScreen extends Screen{
 		retypeNewPasswordLabel = new JLabel("Re-Type New Password: ",JLabel.RIGHT);
 		newEmailLabel = new JLabel("New Email: ",JLabel.RIGHT);
 		
-		currentPassword = new JPasswordField(32);
-		newPassword = new JPasswordField(32);
-		retypeNewPassword = new JPasswordField(32);
-		newEmail = new JTextField(32);
+		currentPassword = new JPasswordField(20);
+		newPassword = new JPasswordField(20);
+		retypeNewPassword = new JPasswordField(20);
+		newEmail = new JTextField(20);
 		
 		changePasswordButton = new JButton("Change Password");
 		changeEmailButton = new JButton("Change Email");
@@ -101,7 +101,8 @@ public class AccountSettingsScreen extends Screen{
 		toolbar.setLayout(new FlowLayout());
 		
 		accountInfo.setLayout(new BoxLayout(accountInfo,BoxLayout.Y_AXIS));
-		accountInfoHPadding.setLayout(new BoxLayout(accountInfoHPadding,BoxLayout.X_AXIS));
+		//accountInfoHPadding.setLayout(new BoxLayout(accountInfoHPadding,BoxLayout.X_AXIS));
+		accountInfoHPadding.setLayout(new FlowLayout());
 		changePassword.setLayout(new GridLayout(4,2));
 		changeEmail.setLayout(new GridLayout(2,2));
 		
@@ -128,20 +129,19 @@ public class AccountSettingsScreen extends Screen{
 		changePassword.add(newPassword);
 		changePassword.add(retypeNewPasswordLabel);
 		changePassword.add(retypeNewPassword);
+		changePassword.add(new JLabel());
 		changePassword.add(changePasswordButton);
 		
 		changeEmail.add(newEmailLabel);
 		changeEmail.add(newEmail);
+		changeEmail.add(new JLabel());
 		changeEmail.add(changeEmailButton);
 
-		accountInfo.add(Box.createGlue());
 		accountInfo.add(changePassword);
+		accountInfo.add(new JLabel(" "));
 		accountInfo.add(changeEmail);
-		accountInfo.add(Box.createGlue());
 		
-		accountInfoHPadding.add(Box.createGlue());
 		accountInfoHPadding.add(accountInfo);
-		accountInfoHPadding.add(Box.createGlue());
 
 		mainContentPanel.add(header,BorderLayout.PAGE_START);
 		mainContentPanel.add(accountInfoHPadding,BorderLayout.CENTER);
