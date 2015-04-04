@@ -145,6 +145,72 @@ public class BugReport{
 		return rtn;
 	}
 	
+	public boolean isSubscribed(String user){
+		ArrayList<String> subs = getSubscribedUsers();
+		
+		for(int i=0;i<subs.size();i++){
+			if(subs.get(i).equals(user)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void changeSubscription(String user, boolean isSub){
+		String title = getTitle();
+		String res = "";
+		
+		if(!openMetaDataRead()){
+			return;
+		}
+		
+		try{
+			reader.readLine();
+			res = reader.readLine();
+		}
+		catch(IOException e){
+			System.out.println("Unexpected subscription read error");
+		}
+		
+		closeMetaDataRead();
+		
+		ArrayList<String> subscribers = getSubscribedUsers();
+		
+		//add or remove subscriber
+		if(isSub){
+			subscribers.add(user);
+		}
+		else{
+			int index = 0;
+			for(int i=0;i<subscribers.size();i++){
+				if(subscribers.get(i).equals(user)){
+					index = i;
+					break;
+				}
+			}
+			subscribers.remove(index);
+		}
+		
+		//write back to file
+		openMetaDataWrite();
+		
+		try{
+			writer.write(title);
+			writer.newLine();
+			writer.write(res);
+			for(int i=0;i<subscribers.size();i++){
+				writer.newLine();
+				writer.write(subscribers.get(i));
+			}
+		}
+		catch(IOException e){
+			System.out.println("Unexpected Metadata Write error");
+		}
+		
+		closeMetaDataWrite();
+	}
+	
 	public int getLatestVersion(){
 		ArrayList<Integer> ver = getVersions();
 		return ver.get(ver.size()-1);
