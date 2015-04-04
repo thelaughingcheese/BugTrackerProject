@@ -3,6 +3,8 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.AddressException;
 
 public class RegisterScreen extends Screen{
 	private JLabel title;
@@ -168,12 +170,37 @@ public class RegisterScreen extends Screen{
 			parentFrame.getContentPane().validate();
 			return;
 		}
+		//check email is okay
+		try{
+			InternetAddress address = new InternetAddress(email.getText());
+			address.validate();
+		} catch(AddressException e)
+		{
+			errorLabel.setText("Invalid email address.");
+			registerPanel.add(errorLabel);
+			parentFrame.getContentPane().validate();
+			return;
+		}
+		
+		// create text file for account
+		 try {
+	            File file = new File(name + ".txt");
+	            BufferedWriter output = new BufferedWriter(new FileWriter(file));
+	            output.write(password.getPassword());
+	            output.newLine();
+	            output.write(email.getText());
+	            output.close();
+		 } catch ( IOException e ) {
+	            e.printStackTrace();
+	        }
+		
 		errorLabel.setText("");
 		parentFrame.getContentPane().validate();
 		System.out.println(new File(dir).getAbsolutePath() + "\\" + name);
-		//check if email is okay
+	
+		 manager.changeScreen("login");
 	}
-
+	
 	public void cancelClicked(){
 		manager.changeScreen("login");
 	}
