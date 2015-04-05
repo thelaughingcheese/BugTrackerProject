@@ -9,6 +9,9 @@ import org.jfree.chart.*;
 import org.jfree.data.category.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.general.*;
+import org.jdatepicker.impl.*;
+import org.jdatepicker.*;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 
 public class StatisticsScreen extends Screen{
 	private JPanel header;
@@ -19,6 +22,11 @@ public class StatisticsScreen extends Screen{
 	ChartPanel chart;
 	
 	private JPanel footer;
+	private JLabel startLabel;
+	private JLabel endLabel;
+	private JDatePickerImpl startDatePicker;
+	private JDatePickerImpl endDatePicker;
+	private JButton updateButton;
 	
 	public StatisticsScreen(JFrame parent, ScreenManager man, LoginSession sess){
 		super(parent,man,sess);
@@ -41,6 +49,29 @@ public class StatisticsScreen extends Screen{
 			if(command.equals("back")){
 				parent.backClicked();
 			}
+			else if(command.equals("update")){
+				parent.updateClicked();
+			}
+		}
+	}
+	
+	private class DateLabelFormatter extends AbstractFormatter {
+		private String datePattern = "yyyy-MM-dd";
+		private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+		@Override
+		public Object stringToValue(String text) throws ParseException {
+			return dateFormatter.parseObject(text);
+		}
+
+		@Override
+		public String valueToString(Object value) throws ParseException {
+			if (value != null) {
+				Calendar cal = (Calendar) value;
+				return dateFormatter.format(cal.getTime());
+			}
+
+			return "";
 		}
 	}
 	
@@ -51,9 +82,24 @@ public class StatisticsScreen extends Screen{
 		title = new JLabel("Report Statistics");
 		
 		content = new JPanel();
-		//update();
 		
 		footer = new JPanel();
+		startLabel = new JLabel("From: ");
+		endLabel = new JLabel("To: ");
+		UtilDateModel startModel = new UtilDateModel();
+		UtilDateModel endModel = new UtilDateModel();
+		startModel.setValue(new Date("January 1 2000"));
+		endModel.setValue(new Date(System.currentTimeMillis()));
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		JDatePanelImpl startDatePanel = new JDatePanelImpl(startModel,p);
+		JDatePanelImpl endDatePanel = new JDatePanelImpl(endModel,p);
+		startDatePicker = new JDatePickerImpl(startDatePanel, new DateLabelFormatter());
+		endDatePicker = new JDatePickerImpl(endDatePanel, new DateLabelFormatter());
+		
+		updateButton = new JButton("Update");
 		
 		//configure components
 		mainContentPanel.setLayout(new BorderLayout());
@@ -66,12 +112,18 @@ public class StatisticsScreen extends Screen{
 		//configure events
 		backButton.setActionCommand("back");
 		backButton.addActionListener(new buttonListener(this));
+		updateButton.setActionCommand("update");
+		updateButton.addActionListener(new buttonListener(this));
 		
 		//organize components into containers
 		header.add(backButton,BorderLayout.WEST);
 		header.add(title,BorderLayout.CENTER);
 		
-		//content.add(chart);
+		footer.add(startLabel);
+		footer.add(startDatePicker);
+		footer.add(endLabel);
+		footer.add(endDatePicker);
+		footer.add(updateButton);
 		
 		mainContentPanel.add(header,BorderLayout.NORTH);
 		mainContentPanel.add(content,BorderLayout.CENTER);
@@ -80,13 +132,12 @@ public class StatisticsScreen extends Screen{
 	
 	public void update(){
 		JFreeChart chart = ChartFactory.createStackedAreaChart(
-         "le title",           
+         "",           
          "Date",            
          "Reports",            
-         createDataset(0,System.currentTimeMillis()/1000L,43200),          
+         createDataset(((Date)startDatePicker.getModel().getValue()).getTime()/1000,((Date)endDatePicker.getModel().getValue()).getTime()/1000,43200),          
          PlotOrientation.VERTICAL,           
          true, true, false);
-		
 		this.chart = new ChartPanel( chart );
 		content.removeAll();
 		content.add(this.chart);
@@ -191,5 +242,10 @@ public class StatisticsScreen extends Screen{
 	
 	public void backClicked(){
 		manager.changeScreen("overview");
+	}
+	
+	public void updateClicked(){
+		update();
+		manager.changeScreen("statistics");
 	}
 }

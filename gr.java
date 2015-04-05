@@ -15,7 +15,7 @@ public class gr{
 }
 
 	public static void main(String[] args){
-		long time = 1420000000;
+		long time = 1427403188;
 		for(int i=0;i<200;i++){
 			BugReportDatabase.createNewReportTime("test","title","desc",time);
 			time = time+(200*randInt(1,(int)(10+0.01*Math.pow(100-i,2))));

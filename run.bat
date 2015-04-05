@@ -1,1 +1,1 @@
-java -cp ".;mail.jar;activation.jar;jcommon-1.0.23.jar;jfreechart-1.0.19.jar;" BugTracker
+java -cp ".;mail.jar;activation.jar;jcommon-1.0.23.jar;jfreechart-1.0.19.jar;jdatepicker-1.3.4.jar;" BugTracker
