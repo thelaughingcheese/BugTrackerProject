@@ -17,6 +17,7 @@ public class BugOverviewScreen extends Screen{
 	private JButton logoutButton;
 	
 	private JButton newReportButton;
+	private JButton statisticsButton;
 	
 	private ArrayList<Integer> reportIds;
 	private ArrayList<BugReport> reports;
@@ -52,6 +53,9 @@ public class BugOverviewScreen extends Screen{
 			if(command.equals("new report")){
 				parent.newReportClicked();
 			}
+			if(command.equals("view stats")){
+				parent.viewStatisticsClicked();
+			}
 		}
 	}
 	
@@ -69,6 +73,7 @@ public class BugOverviewScreen extends Screen{
 		logoutButton = new JButton("Logout");
 		
 		newReportButton = new JButton("Create New Bug Report");
+		statisticsButton = new JButton("View Bug Report Statistics");
 		
 		//configure components
 		mainContentPanel.setLayout(new BorderLayout());
@@ -87,6 +92,8 @@ public class BugOverviewScreen extends Screen{
 		logoutButton.addActionListener(new buttonListener(this));
 		newReportButton.setActionCommand("new report");
 		newReportButton.addActionListener(new buttonListener(this));
+		statisticsButton.setActionCommand("view stats");
+		statisticsButton.addActionListener(new buttonListener(this));
 		
 		//organize components into containers
 		header.add(titlebar);
@@ -95,6 +102,7 @@ public class BugOverviewScreen extends Screen{
 		titlebar.add(logoutButton,BorderLayout.EAST);
 		titlebar.add(accountSettingsButton,BorderLayout.WEST);
 		toolbar.add(newReportButton);
+		toolbar.add(statisticsButton);
 		
 		bugViewer.getViewport().add(bugViewerContent);
 		
@@ -134,5 +142,9 @@ public class BugOverviewScreen extends Screen{
 	public void newReportClicked(){
 		session.activeReport = null;
 		manager.changeScreen("report editor");
+	}
+	
+	public void viewStatisticsClicked(){
+		manager.changeScreen("statistics");
 	}
 }
