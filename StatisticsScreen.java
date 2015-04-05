@@ -51,7 +51,7 @@ public class StatisticsScreen extends Screen{
 		title = new JLabel("Report Statistics");
 		
 		content = new JPanel();
-		update();
+		//update();
 		
 		footer = new JPanel();
 		
@@ -71,7 +71,7 @@ public class StatisticsScreen extends Screen{
 		header.add(backButton,BorderLayout.WEST);
 		header.add(title,BorderLayout.CENTER);
 		
-		content.add(chart);
+		//content.add(chart);
 		
 		mainContentPanel.add(header,BorderLayout.NORTH);
 		mainContentPanel.add(content,BorderLayout.CENTER);
@@ -83,7 +83,7 @@ public class StatisticsScreen extends Screen{
          "le title",           
          "Date",            
          "Reports",            
-         createDataset(0,System.currentTimeMillis()/1000L,100000),          
+         createDataset(0,System.currentTimeMillis()/1000L,43200),          
          PlotOrientation.VERTICAL,           
          true, true, false);
 		
@@ -122,64 +122,59 @@ public class StatisticsScreen extends Screen{
 		firstTime = (firstTime/interval) * interval;
 		ArrayList<IntervalData> sortedData = new ArrayList<IntervalData>();
 
-		int currentReportIndex = 0;
-		for(long time = firstTime;currentReportIndex < reports.size();time+=interval){
+		long lastInterval = (reports.get(reports.size()-1).getTime(reports.get(reports.size()-1).getLatestVersion())/interval)*interval + interval;
+		for(long time = firstTime;time < lastInterval;time+=interval){
 			IntervalData intervalData = new IntervalData(time);
-			if(currentReportIndex != 0){
-				intervalData.existingBugs = sortedData.get(sortedData.size()-1).existingBugs;
-				intervalData.existingBugs += sortedData.get(sortedData.size()-1).newBugs;
-			}
-
-			long nextInterval = time + interval;
-			while(reports.get(currentReportIndex).getTime(reports.get(currentReportIndex).getFirstVersion()) < nextInterval){
-				intervalData.newBugs++;
-				currentReportIndex++;
-				
-				if(currentReportIndex == reports.size()){
-					break;
-				}
-			}
-			
 			sortedData.add(intervalData);
 		}
-		
-		currentReportIndex = 0;
-		int index = 0;
-		for(long time = firstTime;currentReportIndex < reports.size();time+=interval){
-			IntervalData intervalData = sortedData.get(index);
-		
-			long nextInterval = time + interval;
-			while(reports.get(currentReportIndex).getTime(reports.get(currentReportIndex).getLatestVersion()) < nextInterval){
-				if(reports.get(currentReportIndex).isResolved()){
-					long createTime = reports.get(currentReportIndex).getTime(reports.get(currentReportIndex).getFirstVersion());
-					long resolveTime = reports.get(currentReportIndex).getTime(reports.get(currentReportIndex).getLatestVersion());
-
-					if(createTime/interval == resolveTime/interval){
-						intervalData.newBugs--;
-					}
-					else{
-						intervalData.existingBugs--;
-					}
-					intervalData.resolvedBugs++;
-				}
-				
-				currentReportIndex++;
-				
-				if(currentReportIndex == reports.size()){
-					break;
-				}
-			}
+	
+		for(int i=0;i<reports.size();i++){
+			BugReport report = reports.get(i);
+			long timeStart = report.getTime(report.getFirstVersion());
+			long startInterval = (timeStart/interval) * interval;
+			long timeStop;
+			long timeResolved;
 			
-			index++;
-			if(index == sortedData.size()){
-				break;
+			if(report.isResolved()){
+				timeStop = report.getTime(report.getLatestVersion());
+				timeResolved = report.getTime(report.getLatestVersion());
+				long stopInterval = (timeStop/interval) * interval - interval;
+				long resolvedInterval = (timeResolved/interval) * interval;
+				
+				int startIndex = (int)((startInterval - firstTime)/interval);
+				int stopIndex = (int)((stopInterval - firstTime)/interval);
+				int resolvedIndex = (int)((resolvedInterval - firstTime)/interval);
+				
+				if(startIndex != resolvedIndex){
+					sortedData.get(startIndex).newBugs++;
+					for(int k=startIndex+1;k<=stopIndex;k++){
+						sortedData.get(k).existingBugs++;
+					}
+				}	
+
+				sortedData.get(resolvedIndex).resolvedBugs++;
 			}
-		}
+			else{
+				timeStop = report.getTime(report.getLatestVersion());
+				long stopInterval = (timeStop/interval) * interval;
+				
+				int startIndex = (int)((startInterval - firstTime)/interval);
+				int stopIndex = (int)((stopInterval - firstTime)/interval);
+				
+				sortedData.get(startIndex).newBugs++;
+				for(int k=startIndex+1;k<sortedData.size();k++){
+					sortedData.get(k).existingBugs++;
+				}
+			}
+		}	
 		
 		//put into dataset
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		
 		for(int i=0;i<sortedData.size();i++){
+			if(sortedData.get(i).startTime < startDate || sortedData.get(i).startTime > endDate){
+				continue;
+			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
 			

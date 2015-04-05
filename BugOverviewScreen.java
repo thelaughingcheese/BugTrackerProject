@@ -124,7 +124,7 @@ public class BugOverviewScreen extends Screen{
 		}
 		
 		//create gui tiles
-		for(int i=0;i<reports.size();i++){
+		for(int i=reports.size()-1;i>=0;i--){
 			BugReportGuiTile newTile = new BugReportGuiTile(reports.get(i),session, manager);
 			reportTiles.add(newTile);
 			bugViewerContent.add(newTile.getContentPanel());

@@ -31,9 +31,13 @@ public class BugReport{
 	}
 	
 	public void submitNewVersion(String user,String desc,boolean resolution){
+		long time = System.currentTimeMillis() / 1000L;
+		submitNewVersionTime(user,desc,resolution,time);
+	}
+	
+	public void submitNewVersionTime(String user,String desc,boolean resolution,long time){
 		ArrayList<Integer> curVersions = getVersions();
 		int newVersionId = curVersions.get(curVersions.size() - 1) + 1;
-		long time = System.currentTimeMillis() / 1000L;
 		
 		//------------write resolution
 		String title = getTitle();
@@ -79,7 +83,7 @@ public class BugReport{
 		closeVersionWrite();
 		
 		//send notifications
-		notificationManager.notifySubscribers(this,"New submission for bug: "+title);
+		//notificationManager.notifySubscribers(this,"New submission for bug: "+title);
 	}
 	
 	public boolean isResolved(){

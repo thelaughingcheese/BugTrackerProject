@@ -44,10 +44,15 @@ public class BugReportDatabase{
 		return rtn;
 	}
 	
-	public static boolean createNewReport(String user, String title, String desc){
+	public static boolean createNewReportTime(String user, String title, String desc,long time){
 		ArrayList<Integer> curReports = getBugReportIds();
-		int id = curReports.get(curReports.size()-1) + 1;
-		long time = System.currentTimeMillis() / 1000L;
+		int id;
+		if(curReports.size() == 0){
+			id = 1;
+		}
+		else{
+			id = curReports.get(curReports.size()-1) + 1;
+		}
 		
 		//create directory
 		boolean success = (new File("reports/"+id)).mkdirs();
@@ -115,6 +120,12 @@ public class BugReportDatabase{
 		closeManifestWrite();
 		
 		return true;
+	}
+	
+	public static boolean createNewReport(String user, String title, String desc){
+		long time = System.currentTimeMillis() / 1000L;
+		
+		return createNewReportTime(user,title,desc,time);
 	}
 	
 	private static boolean openManifestRead(){
