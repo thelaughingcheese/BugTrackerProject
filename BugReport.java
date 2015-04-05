@@ -83,7 +83,7 @@ public class BugReport{
 		closeVersionWrite();
 		
 		//send notifications
-		//notificationManager.notifySubscribers(this,"New submission for bug: "+title);
+		notificationManager.notifySubscribers(this,"New submission for bug: "+title);
 	}
 	
 	public boolean isResolved(){

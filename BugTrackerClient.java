@@ -24,12 +24,12 @@ public class BugTrackerClient{
 		bugReportEditorScreen = new BugReportEditorScreen(mainFrame, screenManager, loginSession);
 		statisticsScreen = new StatisticsScreen(mainFrame, screenManager, loginSession);
 		
-		//loginScreen.loadScreen();
+		loginScreen.loadScreen();
 		//registerScreen.loadScreen();
 		//bugOverviewScreen.loadScreen();
 		//accountSettingsScreen.loadScreen();
 		//bugReportEditorScreen.loadScreen();
-		statisticsScreen.loadScreen();
+		//statisticsScreen.loadScreen();
 		mainFrame.setVisible(true);
 	}
 	
