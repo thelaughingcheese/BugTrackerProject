@@ -35,6 +35,7 @@ public class BugReportEditorScreen extends Screen{
 			description.setText("");
 			resolution.setSelectedIndex(0);
 			reportTitle.setEditable(true);
+			resolution.setEnabled(false);
 		}
 		else{
 			reportId.setText("" + session.activeReport.getId());
@@ -47,6 +48,7 @@ public class BugReportEditorScreen extends Screen{
 				resolution.setSelectedIndex(0);
 			}
 			reportTitle.setEditable(false);
+			resolution.setEnabled(true);
 		}
 	}
 	
