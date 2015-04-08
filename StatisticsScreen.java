@@ -26,6 +26,8 @@ public class StatisticsScreen extends Screen{
 	private JLabel endLabel;
 	private JDatePickerImpl startDatePicker;
 	private JDatePickerImpl endDatePicker;
+	private JLabel intervalLabel;
+	private JComboBox intervalMenu;
 	private JButton updateButton;
 	
 	public StatisticsScreen(JFrame parent, ScreenManager man, LoginSession sess){
@@ -99,6 +101,10 @@ public class StatisticsScreen extends Screen{
 		startDatePicker = new JDatePickerImpl(startDatePanel, new DateLabelFormatter());
 		endDatePicker = new JDatePickerImpl(endDatePanel, new DateLabelFormatter());
 		
+		intervalLabel= new JLabel("Interval: ");
+		String[] intervalOptions = {"1/2 Day","1 Day","2 Days","1 Week","1 Month"};
+		intervalMenu = new JComboBox(intervalOptions);
+		
 		updateButton = new JButton("Update");
 		
 		//configure components
@@ -123,6 +129,8 @@ public class StatisticsScreen extends Screen{
 		footer.add(startDatePicker);
 		footer.add(endLabel);
 		footer.add(endDatePicker);
+		footer.add(intervalLabel);
+		footer.add(intervalMenu);
 		footer.add(updateButton);
 		
 		mainContentPanel.add(header,BorderLayout.NORTH);
@@ -131,11 +139,27 @@ public class StatisticsScreen extends Screen{
 	}
 	
 	public void update(){
+		int interval;
+		if(intervalMenu.getSelectedItem().equals("1/2 Day")){
+			interval = 43200;
+		}
+		else if(intervalMenu.getSelectedItem().equals("1 Day")){
+			interval = 86400;
+		}
+		else if(intervalMenu.getSelectedItem().equals("2 Days")){
+			interval = 172800;
+		}
+		else if(intervalMenu.getSelectedItem().equals("1 Week")){
+			interval = 604800;
+		}
+		else{
+			interval = 2419200;
+		}
 		JFreeChart chart = ChartFactory.createStackedAreaChart(
          "",           
          "Date",            
          "Reports",            
-         createDataset(((Date)startDatePicker.getModel().getValue()).getTime()/1000,((Date)endDatePicker.getModel().getValue()).getTime()/1000,43200),          
+         createDataset(((Date)startDatePicker.getModel().getValue()).getTime()/1000,((Date)endDatePicker.getModel().getValue()).getTime()/1000,interval),          
          PlotOrientation.VERTICAL,           
          true, true, false);
 		this.chart = new ChartPanel( chart );
